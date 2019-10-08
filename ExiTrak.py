@@ -1,4 +1,6 @@
-import pyb 
+import pyb
+import utime
+import machine
 class ExiTrak:
     def __init__(self):
         self.led = pyb.LED(1)
@@ -10,24 +12,31 @@ class ExiTrak:
     def pinSetup(self):
         microSwitch_in = 'X1'
         self.p_in = pyb.Pin(microSwitch_in, pyb.Pin.IN, pyb.Pin.PULL_UP)
-def timed_function(f, *args, **kwargs):
-    myname = str(f).split(' ')[1]
-    def new_func(*args, **kwargs):
-        t = utime.ticks_us()
-        result = f(*args, **kwargs)
-        delta = utime.ticks_diff(utime.ticks_us(), t)
-        print('Function {} Time = {:6.3f}ms'.format(myname, delta/1000))
-        return result
-    return new_func
+    def toggleLED(self):
+        led = pyb.LED(1)
+        led.on()
+        pyb.delay(1000)
+        led.off()
+    def check_microSwitch(self):
+        return (p_in.value() == 1)
+class Functions:
+    def __init__(self):
+        self.rtc = machine.RTC()
+    def getTime(self):
+        rtc = machine.RTC()
+        # rtc.init([(2019, 10, 8, 2, 14, 46, 36, 104])
+        print(rtc.datetime())
+    # def recordTime
+    
 def main():
     myboard = ExiTrak()
+    myFunctions = Functions()
     myboard.pinSetup()
     while(True):
         print(myboard.p_in.value())
-        if(myboard.p_in.value() == 1):
-            myboard.led.on()
-            pyb.delay(1000)
-            myboard.led.off()
+        if(myboard.check_microSwitch):
+            myFunctions.getTime()
+            myboard.toggleLED()
         # else:
             
 if __name__ == "__main__":
