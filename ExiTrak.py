@@ -22,11 +22,13 @@ class ExiTrak:
 class Functions:
     def __init__(self):
         self.rtc = machine.RTC()
+        self. file = open("data.txt","a+")
     def getTime(self):
         rtc = machine.RTC()
         # rtc.init([(2019, 10, 8, 2, 14, 46, 36, 104])
-        print(rtc.datetime())
-    # def recordTime
+        return rtc.datetime()
+    def createTxtFile():
+        file = open("data.txt","a+")
     
 def main():
     myboard = ExiTrak()
@@ -35,7 +37,8 @@ def main():
     while(True):
         print(myboard.p_in.value())
         if(myboard.check_microSwitch):
-            myFunctions.getTime()
+            myFunctions.createTextFile()
+            myFunctions.file.write(myFunctions.getTime())
             myboard.toggleLED()
         # else:
             
