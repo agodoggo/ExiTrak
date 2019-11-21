@@ -8,13 +8,10 @@ class ExiTrak:
         self.sw = pyb.Switch()
         self.p_in = None
         self.PIN_ON = 1
-    def switchSetup(self):
-        sw = pyb.Switch()
-        sw.callback(lambda: pyb.LED(1).toggle())
     def pinSetup(self):
         microSwitch_in = 'X1'
         self.p_in = pyb.Pin(microSwitch_in, pyb.Pin.IN, pyb.Pin.PULL_DOWN)
-        self.p_in.irq(trigger=machine.Pin.IRQ_HIGH_LEVEL, handler=Functions.stretchRegister())
+        self.p_in.irq(trigger=machine.Pin.IRQ_RISING, handler=Functions.callback())
     def toggleLED(self):
         led = pyb.LED(1)
         led.on()
@@ -33,6 +30,13 @@ class Functions:
         self.tenminutes = 6000000
         self.myPrescaler = 8399
         self.TimerNo = 2
+    def callback:
+        state = pyb.disable_irq()
+        pyb.delay(1000)
+        if (!ExiTrak.check_microSwitch):
+            pyb.enable_irq(state)
+        else:
+            ExiTrak.Sleep()
     def getTime(self):
         return rtc.datetime()
     def stretchRegister(self):
