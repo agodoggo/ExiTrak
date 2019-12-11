@@ -20,8 +20,8 @@ class ExiTrak:
         self.TimerNo = 0x2 #2
         self.months = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         self.last_saved_dateTime = [2015,1,1,4,0,0,0,0]
-        self.last_savedDay = 1
-        self.curr_day = 1
+        self.last_savedDay = 0
+        self.curr_day = 0
 
     def pinSetup(self):
         print("PinSetup")
@@ -88,31 +88,31 @@ class ExiTrak:
     def stretchRegister(self):
         print("entered Stretch Register")
         self.curr_dateTime = self.getDateTime()
-        print("minutes elapsed" + str(self.curr_dateTime[5]-self.last_saved_dateTime[5]))
-        if(self.curr_dateTime[5]-self.last_saved_dateTime[5] >= 1):
-            print("wrote to flash memory")
-            self.writeTime()
-            self.stretchCounter = 0
-            # for i in range(1,self.curr_day-self.last_savedDay):
-                # self.writeTime()
-            # self.last_savedDay = self.curr_day
-            print("Old curr_dateTime" + str(self.curr_dateTime))
-            print("Old last saved dateTime" + str(self.last_saved_dateTime))
-            self.last_saved_dateTime = self.curr_dateTime
-            print("New curr_dateTime" + str(self.curr_dateTime))
-            print("New last saved dateTime" + str(self.last_saved_dateTime))
-        # self.curr_day = self.findDay(self.last_saved_dateTime,self.curr_dateTime)
-        # self.curr_day = self.last_savedDay + 1
-        # if(self.curr_day == self.last_savedDay):
-            # print("Curr day = last_savedDay")
-            # self.last_savedDay = self.curr_day
-        # elif(self.curr_day >= self.last_savedDay):
+        # print("minutes elapsed" + str(self.curr_dateTime[5]-self.last_saved_dateTime[5]))
+        # if(self.curr_dateTime[5]-self.last_saved_dateTime[5] >= 1):
             # print("wrote to flash memory")
             # self.writeTime()
             # self.stretchCounter = 0
-            # for i in range(1,self.curr_day-self.last_savedDay):
-                # self.writeTime()
-            # self.last_savedDay = self.curr_day
+            # # for i in range(1,self.curr_day-self.last_savedDay):
+                # # self.writeTime()
+            # # self.last_savedDay = self.curr_day
+            # print("Old curr_dateTime" + str(self.curr_dateTime))
+            # print("Old last saved dateTime" + str(self.last_saved_dateTime))
+            # self.last_saved_dateTime = self.curr_dateTime
+            # print("New curr_dateTime" + str(self.curr_dateTime))
+            # print("New last saved dateTime" + str(self.last_saved_dateTime))
+        self.curr_day = self.findDay(self.last_saved_dateTime,self.curr_dateTime)
+        # self.curr_day = self.last_savedDay + 1
+        if(self.curr_day == self.last_savedDay):
+            print("Curr day = last_savedDay")
+            self.last_savedDay = self.curr_day
+        elif(self.curr_day > self.last_savedDay):
+            print("wrote to flash memory")
+            self.writeTime()
+            self.stretchCounter = 0
+            for i in range(1,self.curr_day-self.last_savedDay):
+                self.writeTime()
+            self.last_savedDay = self.curr_day
         self.stretchCounter = self.stretchCounter+1
         self.initTimer()
     def toggleLED(self, led_number):
